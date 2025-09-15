@@ -1,0 +1,51 @@
+// 6. For Loops Execution for DropDownList
+
+//.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ForLoopDropDoown.aspx.cs" Inherits="WebApplication5.ForLoopDropDown" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Language Selection</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div style="width:300px; margin:auto; padding:20px;">
+            <asp:DropDownList ID="ddlLanguages" runat="server"></asp:DropDownList><br /><br />
+            <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" /><br /><br />
+            <asp:Label ID="lblSelected" runat="server" ForeColor="Blue"></asp:Label>
+        </div>
+    </form>
+</body>
+</html>
+
+
+//.cs file 
+
+using System;
+using System.Web.UI;
+
+namespace WebApplication5
+{
+    public partial class ForLoopDropDown : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                string[] languages = { "C", "C++", "Java", "Python", "ASP" };
+
+                for (int i = 0; i < languages.Length; i++)
+                {
+                    ddlLanguages.Items.Add(languages[i]);
+                }
+            }
+        }
+
+        protected void btnSubmit_Click(object sender, EventArgs e)
+        {
+            lblSelected.Text = "You selected: " + ddlLanguages.SelectedItem.Text;
+        }
+    }
+}

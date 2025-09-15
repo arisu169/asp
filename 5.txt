@@ -1,0 +1,69 @@
+// 5. GUI form to design Form Controls
+
+//.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="StudentForm.aspx.cs" Inherits="WebApplication4.StudentForm" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Student Attendance Form</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div style="width:400px; margin:auto; padding:20px; border:1px solid #ccc; border-radius:10px;">
+            <h2>Student Attendance Form</h2>
+
+            <asp:Label ID="lblName" runat="server" Text="Student Name:"></asp:Label><br />
+            <asp:TextBox ID="txtName" runat="server" Width="100%"></asp:TextBox><br /><br />
+
+            <asp:Label ID="lblRoll" runat="server" Text="Roll Number:"></asp:Label><br />
+            <asp:TextBox ID="txtRoll" runat="server" Width="100%"></asp:TextBox><br /><br />
+
+            <asp:Label ID="lblClass" runat="server" Text="Class:"></asp:Label><br />
+            <asp:DropDownList ID="ddlClass" runat="server" Width="100%">
+                <asp:ListItem Text="Select Class" Value="" />
+                <asp:ListItem Text="BCA" Value="1" />
+                <asp:ListItem Text="B.com" Value="2" />
+                <asp:ListItem Text="BSC" Value="3" />
+            </asp:DropDownList><br /><br />
+
+            <asp:Label ID="lblStatus" runat="server" Text="Attendance Status:"></asp:Label><br />
+            <asp:RadioButtonList ID="rblStatus" runat="server">
+                <asp:ListItem Text="Present" Value="Present" />
+                <asp:ListItem Text="Absent" Value="Absent" />
+            </asp:RadioButtonList><br /><br />
+
+            <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" /><br /><br />
+
+            <asp:Label ID="lblMessage" runat="server" ForeColor="Green"></asp:Label>
+        </div>
+    </form>
+</body>
+</html>
+
+
+//.cs file
+
+using System;
+using System.Web.UI;
+
+namespace WebApplication4
+{
+    public partial class StudentForm : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+
+        protected void btnSubmit_Click(object sender, EventArgs e)
+        {
+            string name = txtName.Text;
+            string roll = txtRoll.Text;
+            string studentClass = ddlClass.SelectedItem.Text;
+            string status = rblStatus.SelectedItem.Text;
+
+            lblMessage.Text = $"Student {name} (Roll: {roll}) of {studentClass} is marked {status}.";
+        }
+    }
+}

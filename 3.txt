@@ -1,0 +1,36 @@
+//3. Hello World in VisualStudio
+
+//.aspx file
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Hello.aspx.cs" Inherits="WebApplication2.Hello" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Hello World</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+    </form>
+</body>
+</html>
+
+//.cs file
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace WebApplication2
+{
+    public partial class Hello : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            Response.Write("Hello, World!");
+        }
+    }
+}
