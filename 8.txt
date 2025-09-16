@@ -1,25 +1,31 @@
-// 8. ADO.NET Connect to DataSource
+//8. asp
+<form id="form1" runat="server">
+        <div>
+            <asp:GridView ID="g1" runat="server"></asp:GridView>
+        </div>
+    </form>
 
-//Connect.aspx
+//aspx.cs
 
-<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Connect.aspx.cs"
-Inherits="Connect" %>
-<html><body>
-<form runat="server">
-<asp:Label runat="server" ID="lblStatus"></asp:Label>
-</form>
-</body></html>
-
-//Connect.aspx.cs
-
-using System;
+using System.Data;
 using System.Data.SqlClient;
-public partial class Connect : System.Web.UI.Page {
-protected void Page_Load(object sender, EventArgs e) {
-var c=new SqlConnection("Data Source=.;Initial Catalog=master;Integrated
-Security=True");
-c.Open();
-lblStatus.Text="Connected";
-c.Close();
-}
-}
+protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                BindData();
+            }
+
+        }
+        protected void BindData()
+        {
+
+            string connectionString ="Data Source=192.168.3.11;Initial Catalog=59;User ID=bca3b;Password=bvc123";
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM sp", con);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            g1.DataSource = dt;
+            g1.DataBind();
+        }
