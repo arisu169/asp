@@ -1,100 +1,167 @@
-//9.
+//9. ADO.NET connectivity for Accessing MSSQL Table to demonstrate select and create queries.
 
-//aspx
+//.aspx
 
-<form id="form1" runat="server">
-        <div>
-            SUPNO:<asp:TextBox ID="t1" runat="server"></asp:TextBox>
-            <br />
-            <br />
-            SNAME:<asp:TextBox ID="t2" runat="server" ></asp:TextBox>
-            <br />
-            <br />
-            <asp:Button ID="b1" runat="server" Text="insert" OnClick="b1_insert"/>
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="StudentInfo.aspx.cs" Inherits="StudentInfo" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Student Info Insert Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; }
+        .form-container { width: 40%; margin: auto; }
+        .form-container input { margin-bottom: 10px; width: 100%; padding: 8px; }
+        .form-container button { padding: 10px 15px; font-size: 14px; margin-bottom: 20px; }
+        .grid-container { width: 60%; margin: auto; }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="form-container">
+            <asp:Label ID="lblRoll" runat="server" Text="Roll No:"></asp:Label>
+            <asp:TextBox ID="txtRoll" runat="server"></asp:TextBox>
+
+            <asp:Label ID="lblName" runat="server" Text="Name:"></asp:Label>
+            <asp:TextBox ID="txtName" runat="server"></asp:TextBox>
+
+            <asp:Label ID="lblAge" runat="server" Text="Age:"></asp:Label>
+            <asp:TextBox ID="txtAge" runat="server"></asp:TextBox>
+
+            <asp:Button ID="btnInsert" runat="server" Text="Insert" OnClick="btnInsert_Click" />
         </div>
-        <div>
-            <asp:GridView ID="g2" runat="server"></asp:GridView>
+
+        <div class="grid-container">
+            <asp:GridView ID="gvData" runat="server" AutoGenerateColumns="true" 
+                GridLines="Both" BorderStyle="Solid" BorderWidth="1px"
+                HeaderStyle-BackColor="#4CAF50" HeaderStyle-ForeColor="White">
+            </asp:GridView>
         </div>
     </form>
+</body>
+</html>
 
-//aspx.cs
+//.cs
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
 
-
-namespace WebApplication24
+public partial class StudentInfo : System.Web.UI.Page
 {
-    public partial class WebForm1 : System.Web.UI.Page
+    
+    string connectionString = @"Data Source=192.168.X.Y;Initial Catalog=107223861079;User ID=YourUsername;Password=YourPassword";
+
+    protected void Page_Load(object sender, EventArgs e)
     {
-        protected void Page_Load(object sender, EventArgs e)
+        if (!IsPostBack)
         {
-
-        }
-        string connectionString = "Data Source=192.168.3.11;Initial Catalog=59;User ID=bca3b;Password=bvc123";
-        protected void b1_insert(object sender, EventArgs e)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            string query = "INSERT INTO sp (supno, sname) VALUES (@supno, @sname)";
-            SqlCommand cmd = new SqlCommand(query, con);
-            cmd.Parameters.AddWithValue("@supno", Convert.ToInt32(t1.Text));
-            cmd.Parameters.AddWithValue("@sname", t2.Text);
-            con.Open();
-            cmd.ExecuteNonQuery();
-            con.Close();
-            query = "select *from sp";
-
-            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM sp", con);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            g2.DataSource = dt;
-            g2.DataBind();
-        }
-protected void b2_update(object sender, EventArgs e)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            string supno = t1.Text;
-            string sname = t2.Text;
-            string query = "UPDATE sp SET sname=@sname WHERE supno=@supno";
-            SqlCommand cmd = new SqlCommand(query, con);
-            cmd.Parameters.AddWithValue("@supno", Convert.ToInt32(t1.Text));
-
-            cmd.Parameters.AddWithValue("@sname", t2.Text);
-            con.Open();
-            cmd.ExecuteNonQuery();
-            con.Close();
-           
-            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM sp", con);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            g2.DataSource = dt;
-            g2.DataBind();
-        }
-
- protected void b3_delete(object sender, EventArgs e)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            string supno = t1.Text;
-            string query = "delete  from sp WHERE supno=@supno";
-            SqlCommand cmd = new SqlCommand(query, con);
-            cmd.Parameters.AddWithValue("@supno", supno);
-            con.Open();
-            cmd.ExecuteNonQuery();
-            con.Close();
-
-            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM sp", con);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            g2.DataSource = dt;
-            g2.DataBind();
+            BindData();
         }
     }
-}lblResult.Text=r.HasRows?"Rows Found":"No Rows";
-r.Close(); c.Close();
+
+    protected void btnInsert_Click(object sender, EventArgs e)
+    {
+        string roll = txtRoll.Text.Trim();
+        string name = txtName.Text.Trim();
+        int age = int.Parse(txtAge.Text.Trim());
+
+        string insertQuery = "INSERT INTO StudentInfo (RollNo, FullName, Age) VALUES (@RollNo, @FullName, @Age)";
+
+        try
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(insertQuery, con))
+                {
+                    cmd.Parameters.AddWithValue("@RollNo", roll);
+                    cmd.Parameters.AddWithValue("@FullName", name);
+                    cmd.Parameters.AddWithValue("@Age", age);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            // Clear input fields
+            txtRoll.Text = "";
+            txtName.Text = "";
+            txtAge.Text = "";
+
+            // Refresh GridView
+            BindData();
+        }
+        catch (Exception ex)
+        {
+            Response.Write("<h3 style='color:red;'>Error: " + ex.Message + "</h3>");
+        }
+    }
+
+    private void BindData()
+    {
+        string selectQuery = "SELECT * FROM StudentInfo";
+        DataTable dt = new DataTable();
+
+        try
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                using (SqlDataAdapter da = new SqlDataAdapter(selectQuery, con))
+                {
+                    da.Fill(dt);
+                }
+            }
+
+            gvData.DataSource = dt;
+            gvData.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Response.Write("<h3 style='color:red;'>Error: " + ex.Message + "</h3>");
+        }
+    }
 }
+
+
+//.designer.cs
+
+//------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+public partial class StudentInfo
+{
+    protected global::System.Web.UI.WebControls.TextBox txtRoll;
+    protected global::System.Web.UI.WebControls.TextBox txtName;
+    protected global::System.Web.UI.WebControls.TextBox txtAge;
+    protected global::System.Web.UI.WebControls.Button btnInsert;
+    protected global::System.Web.UI.WebControls.GridView gvData;
 }
+
+
+//SQL QUERY
+
+-- 1. Use your database
+USE [YourDatabaseName];
+GO
+
+-- 2. Drop old table if it exists
+IF OBJECT_ID('StudentInfo', 'U') IS NOT NULL
+    DROP TABLE StudentInfo;
+GO
+
+-- 3. Create fresh empty table with auto-increment ID
+CREATE TABLE StudentInfo (
+    StudentID INT IDENTITY(1,1) PRIMARY KEY,  -- Auto-increment
+    RollNo NVARCHAR(10),
+    FullName NVARCHAR(50),
+    Department NVARCHAR(30),
+    Age INT
+);
+GO
+
+-- 4. Verify table is empty
+SELECT * FROM StudentInfo;
+GO
