@@ -1,0 +1,72 @@
+// 11. ASP.NET for student marks using HTML alon with Form Controls.
+
+//.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="StudentMarks.aspx.cs" Inherits="WebApplication12.StudentMarks" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Student Marks Entry</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; }
+        input, button { margin-bottom: 10px; padding: 5px; width: 300px; }
+        button { width: auto; }
+        .result { margin-top: 20px; font-weight: bold; color: green; }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <h2>Enter Student Marks</h2>
+
+        <asp:Label ID="lblName" runat="server" Text="Student Name: "></asp:Label>
+        <asp:TextBox ID="txtName" runat="server"></asp:TextBox><br />
+
+        <asp:Label ID="lblRoll" runat="server" Text="Roll No: "></asp:Label>
+        <asp:TextBox ID="txtRoll" runat="server"></asp:TextBox><br />
+
+        <asp:Label ID="lblMarks" runat="server" Text="Marks: "></asp:Label>
+        <asp:TextBox ID="txtMarks" runat="server"></asp:TextBox><br />
+
+        <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" /><br />
+
+        <asp:Label ID="lblResult" runat="server" CssClass="result"></asp:Label>
+    </form>
+</body>
+</html>
+
+
+//.cs
+
+using System;
+
+namespace WebApplication12
+{
+    public partial class StudentMarks : System.Web.UI.Page
+    {
+        protected void btnSubmit_Click(object sender, EventArgs e)
+        {
+            string name = txtName.Text.Trim();
+            string roll = txtRoll.Text.Trim();
+            string marks = txtMarks.Text.Trim();
+
+            lblResult.Text = $"Student {name} (Roll No: {roll}) scored {marks} marks.";
+        }
+    }
+}
+
+
+//.designer.cs
+
+namespace WebApplication12
+{
+    public partial class StudentMarks
+    {
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.TextBox txtName;
+        protected global::System.Web.UI.WebControls.TextBox txtRoll;
+        protected global::System.Web.UI.WebControls.TextBox txtMarks;
+        protected global::System.Web.UI.WebControls.Button btnSubmit;
+        protected global::System.Web.UI.WebControls.Label lblResult;
+    }
+}
