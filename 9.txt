@@ -50,7 +50,7 @@ using System.Data.SqlClient;
 public partial class StudentInfo : System.Web.UI.Page
 {
     
-    string connectionString = @"Data Source=192.168.X.Y;Initial Catalog=107223861079;User ID=YourUsername;Password=YourPassword";
+    string connectionString = @"Data Source=192.168.X.Y;Initial Catalog=YourDataBaseName;User ID=YourUsername;Password=YourPassword";
 
     protected void Page_Load(object sender, EventArgs e)
     {
