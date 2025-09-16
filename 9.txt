@@ -1,0 +1,27 @@
+// 9. ADO.NET Select & Create Table
+
+// SelectCreate.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="SelectCreate.aspx.cs"
+Inherits="SelectCreate" %>
+<html><body>
+<form runat="server">
+<asp:Label runat="server" ID="lblResult"></asp:Label>
+</form>
+</body></html>
+
+//SelectCreate.aspx.cs
+
+using System;
+using System.Data.SqlClient;
+public partial class SelectCreate : System.Web.UI.Page {
+protected void Page_Load(object sender, EventArgs e) {
+var c=new SqlConnection("Data Source=.;Initial Catalog=master;Integrated
+Security=True");
+c.Open();
+new SqlCommand("if object_id('t') is null create table t(id int)",c).ExecuteNonQuery();
+var r=new SqlCommand("select * from t",c).ExecuteReader();
+lblResult.Text=r.HasRows?"Rows Found":"No Rows";
+r.Close(); c.Close();
+}
+}
