@@ -1,27 +1,100 @@
-// 9. ADO.NET Select & Create Table
+//9.
 
-// SelectCreate.aspx
+//aspx
 
-<%@ Page Language="C#" AutoEventWireup="true" CodeFile="SelectCreate.aspx.cs"
-Inherits="SelectCreate" %>
-<html><body>
-<form runat="server">
-<asp:Label runat="server" ID="lblResult"></asp:Label>
-</form>
-</body></html>
+<form id="form1" runat="server">
+        <div>
+            SUPNO:<asp:TextBox ID="t1" runat="server"></asp:TextBox>
+            <br />
+            <br />
+            SNAME:<asp:TextBox ID="t2" runat="server" ></asp:TextBox>
+            <br />
+            <br />
+            <asp:Button ID="b1" runat="server" Text="insert" OnClick="b1_insert"/>
+        </div>
+        <div>
+            <asp:GridView ID="g2" runat="server"></asp:GridView>
+        </div>
+    </form>
 
-//SelectCreate.aspx.cs
-
+//aspx.cs
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data;
 using System.Data.SqlClient;
-public partial class SelectCreate : System.Web.UI.Page {
-protected void Page_Load(object sender, EventArgs e) {
-var c=new SqlConnection("Data Source=.;Initial Catalog=master;Integrated
-Security=True");
-c.Open();
-new SqlCommand("if object_id('t') is null create table t(id int)",c).ExecuteNonQuery();
-var r=new SqlCommand("select * from t",c).ExecuteReader();
-lblResult.Text=r.HasRows?"Rows Found":"No Rows";
+
+
+namespace WebApplication24
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+        string connectionString = "Data Source=192.168.3.11;Initial Catalog=59;User ID=bca3b;Password=bvc123";
+        protected void b1_insert(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            string query = "INSERT INTO sp (supno, sname) VALUES (@supno, @sname)";
+            SqlCommand cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@supno", Convert.ToInt32(t1.Text));
+            cmd.Parameters.AddWithValue("@sname", t2.Text);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+            query = "select *from sp";
+
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM sp", con);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            g2.DataSource = dt;
+            g2.DataBind();
+        }
+protected void b2_update(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            string supno = t1.Text;
+            string sname = t2.Text;
+            string query = "UPDATE sp SET sname=@sname WHERE supno=@supno";
+            SqlCommand cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@supno", Convert.ToInt32(t1.Text));
+
+            cmd.Parameters.AddWithValue("@sname", t2.Text);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+           
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM sp", con);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            g2.DataSource = dt;
+            g2.DataBind();
+        }
+
+ protected void b3_delete(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            string supno = t1.Text;
+            string query = "delete  from sp WHERE supno=@supno";
+            SqlCommand cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@supno", supno);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM sp", con);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            g2.DataSource = dt;
+            g2.DataBind();
+        }
+    }
+}lblResult.Text=r.HasRows?"Rows Found":"No Rows";
 r.Close(); c.Close();
 }
 }
