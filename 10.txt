@@ -38,7 +38,7 @@ namespace WebApplication11
 {
     public partial class InsertUpdate : System.Web.UI.Page
     {
-        string connectionString = @"Data Source=192.168.X.Y;Initial Catalog=107223861079;User ID=your_username;Password=your_password";
+        string connectionString = @"Data Source=192.168.X.Y;Initial Catalog=YourDataBaseName;User ID=your_username;Password=your_password";
 
         protected void Page_Load(object sender, EventArgs e)
         {
