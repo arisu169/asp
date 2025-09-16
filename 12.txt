@@ -1,0 +1,107 @@
+// 12. ASP.NET displaying student details wirh ADO.NET and AJAX Controls
+
+//.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="StudentDetails.aspx.cs" Inherits="WebApplication13.StudentDetails" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Student Details</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+        <h2>Fetch Student Details</h2>
+        <asp:Label ID="lblRoll" runat="server" Text="Enter Roll No: "></asp:Label>
+        <asp:TextBox ID="txtRoll" runat="server"></asp:TextBox>
+        <asp:Button ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_Click" /><br /><br />
+        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+            <ContentTemplate>
+                <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="true"
+                    GridLines="Both" BorderStyle="Solid" BorderWidth="1px"
+                    HeaderStyle-BackColor="#4CAF50" HeaderStyle-ForeColor="White">
+                </asp:GridView>
+            </ContentTemplate>
+        </asp:UpdatePanel>
+    </form>
+</body>
+</html>
+
+
+//.cs
+
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Web.UI.WebControls;
+
+namespace WebApplication13
+{
+    public partial class StudentDetails : System.Web.UI.Page
+    {
+        string connectionString = @"Data Source=192.168.X.Y;Initial Catalog=YourDataBaseName;User ID=your_username;Password=your_password";
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            string roll = txtRoll.Text.Trim();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM Students WHERE RollNo=@RollNo";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@RollNo", roll);
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+
+                        GridView1.DataSource = dt;
+                        GridView1.DataBind();
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+//.designer.cs
+
+namespace WebApplication13
+{
+    public partial class StudentDetails
+    {
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
+        protected global::System.Web.UI.WebControls.TextBox txtRoll;
+        protected global::System.Web.UI.WebControls.Button btnSearch;
+        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+        protected global::System.Web.UI.WebControls.GridView GridView1;
+        protected global::System.Web.UI.WebControls.Label lblRoll;
+    }
+}
+
+
+//.SQL QUERY
+
+USE [YourDataBaseName];
+GO
+
+IF OBJECT_ID('Students', 'U') IS NOT NULL
+    DROP TABLE Students;
+GO
+
+CREATE TABLE Students (
+    RollNo INT PRIMARY KEY,
+    Name NVARCHAR(50),
+    Marks INT
+);
+GO
+
+INSERT INTO Students VALUES (1, 'Rahul', 85);
+INSERT INTO Students VALUES (2, 'Priya', 92);
+INSERT INTO Students VALUES (3, 'Arjun', 78);
+GO
