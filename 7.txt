@@ -2,47 +2,35 @@
 
 //.aspx 
 
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WhileLoopMenu.aspx.cs" Inherits="WebApplication7.WhileLoopMenu" %>
-
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WhileLoop.aspx.cs" Inherits="WebApplication21.WhileLoop" %>
 <!DOCTYPE html>
-<html xmlns="https://www.w3.org/1999/xhtml">
+<html>
 <head runat="server">
-    <title>PopUp Menu Example</title>
+    <title>Menu Example</title>
 </head>
 <body>
     <form id="form1" runat="server">
-        <div style="margin:20px; font-family:Arial;">
-            <h3>PopUp Menu Example (while loop)</h3>
-            <!-- ASP.NET Menu -->
-            <asp:Menu ID="m1" runat="server"></asp:Menu>
-        </div>
+        <asp:Menu ID="menu" runat="server"></asp:Menu>
     </form>
 </body>
 </html>
 
 
+
 //.cs file
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-namespace WebApplication7
+namespace WebApplication21
 {
-    public partial class WhileLoopMenu : System.Web.UI.Page
+    public partial class WhileLoop : Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            int i = 1;
-            while (i <= 6) // Add 6 items
+            if (!IsPostBack)
             {
-                MenuItem item = new MenuItem("BCA " + i + " Semester");
-                m1.Items.Add(item);
-                i++;
-            }
-        }
-    }
-}
+                int i = 1;
+                while (i <= 1)
+                    menu.Items.Add(new MenuItem("Item" + i++));
+            }}}}
