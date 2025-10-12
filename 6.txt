@@ -2,20 +2,12 @@
 
 //.aspx
 
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ForLoopDropDown.aspx.cs" Inherits="WebApplication5.ForLoopDropDown" %>
-
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ForLoop.aspx.cs" Inherits="WebApplication21.ForLoop" %>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title>Language Selection</title>
-</head>
+<html>
 <body>
     <form id="form1" runat="server">
-        <div style="width:300px; margin:auto; padding:20px;">
-            <asp:DropDownList ID="ddlLanguages" runat="server"></asp:DropDownList><br /><br />
-            <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" /><br /><br />
-            <asp:Label ID="lblSelected" runat="server" ForeColor="Blue"></asp:Label>
-        </div>
+        <asp:DropDownList ID="ddlNumbers" runat="server"></asp:DropDownList>
     </form>
 </body>
 </html>
@@ -25,28 +17,14 @@
 
 using System;
 using System.Web.UI;
-
-namespace WebApplication5
+namespace WebApplication21
 {
-    public partial class ForLoopDropDown : Page
+    public partial class ForLoop : Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                string[] languages = { "C", "C++", "Java", "Python", "ASP" };
-
-                for (int i = 0; i < languages.Length; i++)
-                {
-                    ddlLanguages.Items.Add(languages[i]);
-                }
-            }
-        }
-
-        protected void btnSubmit_Click(object sender, EventArgs e)
-        {
-            lblSelected.Text = "You selected: " + ddlLanguages.SelectedItem.Text;
-        }
-    }
-}
-
+                for (int i = 1; i <= 5; i++)
+                    ddlNumbers.Items.Add(i.ToString());
+            }}}}
