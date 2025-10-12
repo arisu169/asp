@@ -2,30 +2,15 @@
 
 //.aspx
 
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Attendance.aspx.cs" Inherits="WebApplication2.Attendance" %>
-
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="StudentAttendance.aspx.cs" Inherits="WebApplication21.StudentAttendance" %>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title>Attendance</title>
-</head>
+<html>
 <body>
     <form id="form1" runat="server">
-        <h2>Student Attendance</h2>
-        <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False">
-            <Columns>
-                <asp:BoundField DataField="Id" HeaderText="ID" />
-                <asp:BoundField DataField="Name" HeaderText="Name" />
-                <asp:TemplateField HeaderText="Present">
-                    <ItemTemplate>
-                        <asp:CheckBox ID="chkPresent" runat="server" />
-                    </ItemTemplate>
-                </asp:TemplateField>
-            </Columns>
-        </asp:GridView>
-        <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" />
-        <br />
-        <asp:Label ID="lblResult" runat="server"></asp:Label>
+        <asp:TextBox ID="txtName" runat="server" PlaceHolder="name"/><br />
+        <asp:CheckBox ID="chkPresent" runat="server" Text="present"/><br />
+        <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" /><br />
+        <asp:Label ID="lblMessage" runat="server" />
     </form>
 </body>
 </html>
@@ -34,48 +19,15 @@
 //.cs file
 
 using System;
-using System.Collections.Generic;
-using System.Web.UI.WebControls;
-
-namespace WebApplication2
+namespace WebApplication21
 {
-    public partial class Attendance : System.Web.UI.Page
+    public partial class StudentAttendance : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
-            {
-                var students = new List<Student>()
-                {
-                    new Student(){ Id=1, Name="Alice" },
-                    new Student(){ Id=2, Name="Bob" },
-                    new Student(){ Id=3, Name="Charlie" }
-                };
 
-                GridView1.DataSource = students;
-                GridView1.DataBind();
-            }
         }
-
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
-            string present = "";
-            foreach (GridViewRow row in GridView1.Rows)
-            {
-                CheckBox chk = (CheckBox)row.FindControl("chkPresent");
-                if (chk.Checked)
-                {
-                    present += row.Cells[1].Text + " ";
-                }
-            }
-
-            lblResult.Text = "Present: " + present;
-        }
-
-        public class Student
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-        }
-    }
-}
+            lblMessage.Text =  chkPresent.Checked ? "Present" : "Absent";
+        }}}
