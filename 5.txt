@@ -2,68 +2,43 @@
 
 //.aspx
 
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="StudentForm.aspx.cs" Inherits="WebApplication4.StudentForm" %>
-
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="FormControls.aspx.cs" Inherits="WebApplication21.FormControls" %>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title>Student Attendance Form</title>
-</head>
+<html>
 <body>
-    <form id="form1" runat="server">
-        <div style="width:400px; margin:auto; padding:20px; border:1px solid #ccc; border-radius:10px;">
-            <h2>Student Attendance Form</h2>
+    <form runat="server">
+<asp:TextBox ID="txtName" runat="server" Text="Name" /><br /><br />
+        <asp:TextBox ID="txtRoll" runat="server" Text="Roll no" /><br /><br />
 
-            <asp:Label ID="lblName" runat="server" Text="Student Name:"></asp:Label><br />
-            <asp:TextBox ID="txtName" runat="server" Width="100%"></asp:TextBox><br /><br />
+        <asp:RadioButtonList ID="rblClass" runat="server" >
+            <asp:ListItem>BCA 3B </asp:ListItem>
+            <asp:ListItem>BCA 3A </asp:ListItem>
+        </asp:RadioButtonList>
 
-            <asp:Label ID="lblRoll" runat="server" Text="Roll Number:"></asp:Label><br />
-            <asp:TextBox ID="txtRoll" runat="server" Width="100%"></asp:TextBox><br /><br />
+<asp:CheckBox ID="chkPresent" runat="server" Text="Present" />
 
-            <asp:Label ID="lblClass" runat="server" Text="Class:"></asp:Label><br />
-            <asp:DropDownList ID="ddlClass" runat="server" Width="100%">
-                <asp:ListItem Text="Select Class" Value="" />
-                <asp:ListItem Text="BCA" Value="1" />
-                <asp:ListItem Text="B.com" Value="2" />
-                <asp:ListItem Text="BSC" Value="3" />
-            </asp:DropDownList><br /><br />
-
-            <asp:Label ID="lblStatus" runat="server" Text="Attendance Status:"></asp:Label><br />
-            <asp:RadioButtonList ID="rblStatus" runat="server">
-                <asp:ListItem Text="Present" Value="Present" />
-                <asp:ListItem Text="Absent" Value="Absent" />
-            </asp:RadioButtonList><br /><br />
-
-            <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" /><br /><br />
-
-            <asp:Label ID="lblMessage" runat="server" ForeColor="Green"></asp:Label>
-        </div>
+        <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" />
+        <asp:Label ID="lblResult" runat="server" />
     </form>
 </body>
 </html>
+
 
 
 //.cs file
 
 using System;
 using System.Web.UI;
-
-namespace WebApplication4
+namespace WebApplication21
 {
-    public partial class StudentForm : Page
+    public partial class AttendanceForm : Page
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-        }
-
+        protected void Page_Load(object sender, EventArgs e) { }
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
             string name = txtName.Text;
             string roll = txtRoll.Text;
-            string studentClass = ddlClass.SelectedItem.Text;
-            string status = rblStatus.SelectedItem.Text;
-
-            lblMessage.Text = $"Student {name} (Roll: {roll}) of {studentClass} is marked {status}.";
-        }
-    }
-}
+            string cls = rblClass.SelectedValue;
+            string status = chkPresent.Checked ? "Present" : "Absent";
+            lblResult.Text = name + roll + cls + status;
+        }}}
